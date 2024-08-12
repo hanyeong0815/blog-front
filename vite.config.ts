@@ -19,6 +19,6 @@ export default defineConfig({
   },
   root: ".",
   build: {
-    outDir: "../dist/shop",
+    outDir: "../dist/blog",
   },
 });

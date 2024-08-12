@@ -6,11 +6,21 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      gridTemplateColumns: {
+        custom: "15% 45% 20% 10% 10%",
+        custom2: "75% 1% 24%",
+      },
       colors: {
-        main: "#333",
+        main: "#89AAE6",
         "main-contra": "#FEFEFE",
         sub: "#000000",
         "sub-contra": "#FFFFFF",
+        "base-bg": "#061826",
+        "header-bg": "#0471A6",
+        "box-bg": "#3685B5",
+        "detail-view-bg": "#989FCE",
+        "comment-bg": "#49516F",
+        "board-post-bg": "#2E3347",
 
         // example of custom palette
         cart: "#9FC131",
@@ -82,5 +92,5 @@ module.exports = {
       "t-inner": "inset 0 7px 9px -7px rgba(0,0,0,0.4)",
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar-hide")],
 };
