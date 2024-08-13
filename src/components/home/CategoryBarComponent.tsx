@@ -1,15 +1,14 @@
 import category from "@models/category/Category";
 import axios from "axios";
 import { FunctionComponent as FC, useLayoutEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 interface CategoryBarComponentProps {
   selectedCategory: string;
-  setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const CategoryBarComponent: FC<CategoryBarComponentProps> = (props) => {
-  const { selectedCategory, setSelectedCategory, setPage } = props;
+  const { selectedCategory } = props;
 
   const [categoryList, setCategoryList] = useState<category[]>();
 
@@ -28,35 +27,29 @@ const CategoryBarComponent: FC<CategoryBarComponentProps> = (props) => {
 
   return (
     <div className="flex gap-1 relative px-2 pt-2 overflow-y-scroll whitespace-nowrap scrollbar-hide items-stretch w-full">
-      <button
-        onClick={() => {
-          setSelectedCategory("default");
-          setPage(1);
-        }}
+      <Link
+        to={`/home`}
         className={`rounded-t-md py-2 px-3 ${
           selectedCategory === "default"
             ? "bg-main font-bold border-2"
             : "border text-gray-100"
         }`}
       >
-        전체
-      </button>
+        <button>전체</button>
+      </Link>
       {categoryList?.map((category, index) => {
         return (
-          <button
+          <Link
             key={category.id}
-            onClick={() => {
-              setSelectedCategory(category.category);
-              setPage(1);
-            }}
+            to={`/${category.category}`}
             className={`rounded-t-md py-2 px-3 ${
-              selectedCategory === category.category
+              (selectedCategory ?? "default") === category.category
                 ? "bg-main font-bold border-2"
                 : "border text-gray-100"
             }`}
           >
-            {category.category}
-          </button>
+            <button key={category.id}>{category.category}</button>
+          </Link>
         );
       })}
     </div>

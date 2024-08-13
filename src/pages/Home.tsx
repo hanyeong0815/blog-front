@@ -2,19 +2,22 @@ import BoardListComponent from "@components/home/BoardListComponent";
 import { useLayoutEffect, useState } from "react";
 import boardList from "@models/board/BoardListView";
 import axios from "axios";
-import RecommendListComponent from "@components/home/RecommendListComponent";
+import RecommendListComponent from "@components/common/RecommendListComponent";
 import CategoryBarComponent from "@components/home/CategoryBarComponent";
 import Layout from "@components/layout/Layout";
+import { useParams } from "react-router-dom";
 
 const Home = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>("default");
+  const { category, page } = useParams();
+
   const [boardList, setBoardList] = useState<boardList>();
-  const [page, setPage] = useState<number>(1);
 
   useLayoutEffect(() => {
-    const url = `http://localhost:8100/board?page=${page}${
-      selectedCategory !== "default" && "&category=" + selectedCategory
+    const url = `http://localhost:8100/board?page=${Number(page ?? "0")}${
+      (category ?? "default") !== "default" ? "&category=" + category : ""
     }`;
+
+    console.log("진입", url);
 
     axios
       .get(url)
@@ -25,21 +28,18 @@ const Home = () => {
       .catch((err) => {
         console.error("\n\n\n\n\n\n", err, "\n\n\n\n\n\n");
       });
-  }, [page, selectedCategory]);
+  }, [page, category]);
 
   return (
     <Layout>
       <div className="w-full h-screen bg-base-bg">
         <div className="flex flex-row gap-4 p-4">
-          <div className="w-[74%]">
-            <div className="flex flex-col">
-              <CategoryBarComponent
-                selectedCategory={selectedCategory}
-                setSelectedCategory={setSelectedCategory}
-                setPage={setPage}
-              />
-              <BoardListComponent boardList={boardList?.boardList} />
-            </div>
+          <div className="w-[74%] flex flex-col gap-0">
+            <CategoryBarComponent selectedCategory={category ?? "default"} />
+            <BoardListComponent
+              boardList={boardList?.boardList}
+              totalPage={boardList?.totalPage ?? 0}
+            />
           </div>
           <div className="w-[25%]">
             <RecommendListComponent />

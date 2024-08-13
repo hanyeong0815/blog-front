@@ -20,7 +20,7 @@ const HomeHead: FC<HomeHeadProps> = (props) => {
   return (
     <div className="flex flex-row justify-between bg-header-bg min-w-full font-bold">
       <div className="pl-7">
-        <Link to="/">
+        <Link to="/home">
           <img src={blogLogo} />
         </Link>
       </div>

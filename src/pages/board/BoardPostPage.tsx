@@ -62,7 +62,7 @@ const BoardPostPage: FC<BoardPostPageProps> = (props) => {
         nickname: authUser?.nickname,
       })
       .then(({ data }) => {
-        if (data) navi("/");
+        if (data) navi("/home");
       })
       .catch((err) => {
         console.error(err);

@@ -1,6 +1,6 @@
 const PATH = {
-  HOME: "/",
-  BOARD_POST: "/post",
+  HOME: "/home",
+  BOARD_POST: "/board/post",
 } as const;
 
 export default PATH;

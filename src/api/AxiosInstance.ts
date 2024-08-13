@@ -45,7 +45,7 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         StorageManager.clearAllUnsticky();
-        window.location.href = "/";
+        window.location.href = "/home";
         return Promise.reject(refreshError);
       }
     }

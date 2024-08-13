@@ -38,7 +38,7 @@ const BoardSimpleListView: FC<BoardSimpleListViewProps> = (props) => {
                   <p className="overflow-hidden text-ellipsis whitespace-nowrap text-md w-3/5 items-center justify-start pl-2">
                     {board.title}
                   </p>
-                  <p className="border border-white rounded-md p-1 bg-box-bg text-xs">
+                  <p className="border border-white rounded-md p-1 bg-box-bg text-xs font-bold">
                     {format(board.createdAt, "MM.dd HH:mm", {
                       locale: ko,
                     })}

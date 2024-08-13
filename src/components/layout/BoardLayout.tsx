@@ -1,6 +1,6 @@
 import { FunctionComponent as FC } from "react";
 import Layout from "./Layout";
-import RecommendListComponent from "@components/home/RecommendListComponent";
+import RecommendListComponent from "@components/common/RecommendListComponent";
 import BoardSimpleListView from "@components/board/BoardSimpleListView";
 
 interface BoardLayoutProps {
