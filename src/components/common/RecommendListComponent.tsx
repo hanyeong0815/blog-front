@@ -31,9 +31,9 @@ const RecommendListComponent: FC<RecommendListComponentProps> = (props) => {
       <h1 className="font-bold text-2xl pb-4">추천 게시글</h1>
       <ul>
         {boardList !== undefined &&
-          boardList.boardList.sort().map((board, index) => {
+          boardList.boardList.map((board, index) => {
             return (
-              <Link to={`/${board.boardId}`} key={board.boardId}>
+              <Link to={`/board/${board.boardId}`} key={board.boardId}>
                 <li className="flex flex-row justify-between items-center p-2 border-y text-lg">
                   <p className="overflow-hidden text-ellipsis whitespace-nowrap text-md w-3/5 items-center justify-start pl-2">
                     {board.title}

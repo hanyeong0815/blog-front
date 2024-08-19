@@ -17,7 +17,9 @@ function App() {
         <Route path=":category" element={<Home />}>
           <Route path=":page" element={<Home />} />
         </Route>
-        <Route path={BOARD_POST} element={<BoardPostPage />} />
+        <Route path={BOARD_POST} element={<BoardPostPage />}>
+          <Route path=":boardId" element={<BoardPostPage />} />
+        </Route>
         <Route path="board">
           <Route path=":boardId" element={<BoardDetailView />} />
         </Route>

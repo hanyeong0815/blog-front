@@ -52,6 +52,7 @@ const useAuth = create<AuthState>((set, get) => ({
     StorageManager.clearAllUnsticky();
     set({ isAuthenticated: false, authUser: null });
     option?.success && option.success(true);
+    location.reload();
   },
   setIsUnSignWarningOpen: (status: React.SetStateAction<boolean>) => {
     set((state) => ({

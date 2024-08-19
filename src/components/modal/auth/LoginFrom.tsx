@@ -80,6 +80,7 @@ const LoginFrom: FC<LoginFromProps> = (props) => {
         <input
           type="text"
           ref={usernameRef}
+          autoFocus
           className={`${defaultButtonStyle}`}
           placeholder="ID"
           spellCheck={false}

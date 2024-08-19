@@ -4,15 +4,18 @@ import axios from "axios";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import BoardCommentListView from "@components/board/BoardCommentListView";
 import BoardRecommendAreaComponent from "@components/board/BoardRecommendAreaComponent";
 import api from "@/api/AxiosInstance";
 import BoardLayout from "@components/layout/BoardLayout";
+import PATH from "@utils/routes/PATH";
 
 const BoardDetailView = () => {
   const { boardId } = useParams();
-  const { authUser, accessToken } = useAuth();
+  const { authUser } = useAuth();
+  const { BOARD_POST } = PATH;
+  const navi = useNavigate();
 
   const [boardDetail, setBoardDetail] = useState<boardDetailView>();
 
@@ -58,6 +61,24 @@ const BoardDetailView = () => {
       });
   }, [boardDetail]);
 
+  const delteBoard = useCallback(() => {
+    if (boardDetail?.username !== authUser?.username) return;
+
+    const url = "http://localhost:8100/board";
+
+    api
+      .delete(url, { data: { boardId, username: authUser?.username } })
+      .then(({ data }) => data)
+      .then((reponse: boolean) => {
+        if (reponse) {
+          navi("/home");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [boardDetail]);
+
   return (
     <BoardLayout>
       <h1 className="flex flex-row gap-3 items-center rounded-t-lg px-4 py-2 bg-detail-view-bg text-xl font-extrabold border-l-2">
@@ -90,7 +111,20 @@ const BoardDetailView = () => {
         </div>
       </div>
       <div className="bg-detail-view-bg min-h-96 px-6">
-        <p className="h-full whitespace-pre-line pt-24">
+        {authUser?.username === boardDetail?.username && (
+          <div className="flex flex-row gap-4 pt-2 justify-end">
+            <button onClick={delteBoard} className="text-gray-600 underline">
+              삭제
+            </button>
+            <Link
+              to={`${BOARD_POST}/${boardDetail?.boardId}`}
+              className="text-gray-600 underline"
+            >
+              수정
+            </Link>
+          </div>
+        )}
+        <p className="h-full whitespace-pre-line pt-20">
           {boardDetail?.content}
         </p>
       </div>

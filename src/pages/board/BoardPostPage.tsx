@@ -1,21 +1,14 @@
 import api from "@/api/AxiosInstance";
 import BoardLayout from "@components/layout/BoardLayout";
+import { boardUpdateData } from "@models/board/BoardDetailView";
 import category from "@models/category/Category";
 import useAuth from "@store/auth/useAuth";
 import axios from "axios";
-import {
-  FunctionComponent as FC,
-  useCallback,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-interface BoardPostPageProps {}
-
-const BoardPostPage: FC<BoardPostPageProps> = (props) => {
-  const {} = props;
+const BoardPostPage = () => {
+  const { boardId } = useParams();
   const { isAuthenticated, authUser, setIsUnSignWarningOpen } = useAuth();
 
   const categoryUrl = "http://localhost:8100/category";
@@ -27,6 +20,7 @@ const BoardPostPage: FC<BoardPostPageProps> = (props) => {
   const contentRef = useRef<HTMLTextAreaElement | null>(null);
 
   const [categoryList, setCategoryList] = useState<category[]>();
+  const [board, setBoard] = useState<boardUpdateData>();
 
   useLayoutEffect(() => {
     if (!isAuthenticated) {
@@ -44,6 +38,46 @@ const BoardPostPage: FC<BoardPostPageProps> = (props) => {
       });
   }, []);
 
+  useLayoutEffect(() => {
+    if (boardId === undefined) return;
+
+    const url = `http://localhost:8100/board/update/${boardId}/${authUser?.username}`;
+
+    api
+      .get(url)
+      .then(({ data }) => data)
+      .then((response: boardUpdateData) => {
+        setBoard(response);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBoard((board) => ({
+      content: board?.content ?? contentRef.current?.value ?? "",
+      category: board?.category ?? categoryRef.current?.value ?? "",
+      title: e.target.value,
+    }));
+  };
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setBoard((board) => ({
+      content: e.target.value,
+      category: board?.category ?? categoryRef.current?.value ?? "",
+      title: board?.title ?? titleRef.current?.value ?? "",
+    }));
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setBoard((board) => ({
+      content: board?.content ?? contentRef.current?.value ?? "",
+      category: e.target.value,
+      title: board?.title ?? titleRef.current?.value ?? "",
+    }));
+  };
+
   const post = useCallback(() => {
     const category = categoryRef.current?.value;
     const title = titleRef.current?.value;
@@ -52,9 +86,11 @@ const BoardPostPage: FC<BoardPostPageProps> = (props) => {
     if (category === "" || title === "" || content === "") return;
 
     const url = "http://localhost:8100/board";
+    const updateBoardId = boardId ?? null;
 
     api
       .post(url, {
+        id: updateBoardId,
         category,
         title,
         content,
@@ -75,6 +111,8 @@ const BoardPostPage: FC<BoardPostPageProps> = (props) => {
         <div className="flex flex-row gap-4 px-6 py-4 bg-board-post-bg border-y">
           <select
             ref={categoryRef}
+            value={board?.category ?? ""}
+            onChange={handleSelectChange}
             className="px-4 py-2 appearance-none text-center font-bold bg-gray-300"
           >
             <option value="">카테고리</option>
@@ -89,6 +127,8 @@ const BoardPostPage: FC<BoardPostPageProps> = (props) => {
           <input
             type="text"
             ref={titleRef}
+            value={board?.title ?? ""}
+            onChange={handleInputChange}
             className="px-2 py-2 w-full bg-gray-300 text-xl"
             spellCheck={false}
           />
@@ -96,6 +136,8 @@ const BoardPostPage: FC<BoardPostPageProps> = (props) => {
         <div className="flex flex-col gap-8 px-6 py-4 bg-board-post-bg border-y h-full">
           <textarea
             ref={contentRef}
+            value={board?.content ?? ""}
+            onChange={handleTextareaChange}
             className="resize-none px-2 py-1 text-xl text-gray-200 bg-gray-700 w-full h-full"
             spellCheck={false}
           ></textarea>

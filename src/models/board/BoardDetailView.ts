@@ -11,6 +11,12 @@ export default interface boardDetailView {
   createdAt: string;
 }
 
+export interface boardUpdateData {
+  category: string;
+  title: string;
+  content: string;
+}
+
 export interface comment {
   id: string;
   username: string;

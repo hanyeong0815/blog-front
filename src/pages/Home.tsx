@@ -17,8 +17,6 @@ const Home = () => {
       (category ?? "default") !== "default" ? "&category=" + category : ""
     }`;
 
-    console.log("진입", url);
-
     axios
       .get(url)
       .then(({ data }) => data)
