@@ -13,7 +13,7 @@ const RecommendListComponent: FC<RecommendListComponentProps> = (props) => {
   const [boardList, setBoardList] = useState<boardList>();
 
   useLayoutEffect(() => {
-    const url = `http://localhost:8100/board?size=5&size=5`;
+    const url = `http://localhost:8100/board?page=0&size=5`;
 
     axios
       .get(url)
@@ -30,7 +30,7 @@ const RecommendListComponent: FC<RecommendListComponentProps> = (props) => {
     <div className="border rounded-md p-4 bg-main">
       <h1 className="font-bold text-2xl pb-4">추천 게시글</h1>
       <ul>
-        {boardList !== undefined &&
+        {boardList !== undefined ? (
           boardList.boardList.map((board, index) => {
             return (
               <Link to={`/board/${board.boardId}`} key={board.boardId}>
@@ -46,7 +46,10 @@ const RecommendListComponent: FC<RecommendListComponentProps> = (props) => {
                 </li>
               </Link>
             );
-          })}
+          })
+        ) : (
+          <div></div>
+        )}
       </ul>
     </div>
   );

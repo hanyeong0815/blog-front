@@ -8,12 +8,11 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import BoardCommentListView from "@components/board/BoardCommentListView";
 import BoardRecommendAreaComponent from "@components/board/BoardRecommendAreaComponent";
 import api from "@/api/AxiosInstance";
-import BoardLayout from "@components/layout/BoardLayout";
 import PATH from "@utils/routes/PATH";
 
 const BoardDetailView = () => {
   const { boardId } = useParams();
-  const { authUser } = useAuth();
+  const { isAuthenticated, authUser } = useAuth();
   const { BOARD_POST } = PATH;
   const navi = useNavigate();
 
@@ -80,11 +79,8 @@ const BoardDetailView = () => {
   }, [boardDetail]);
 
   return (
-    <BoardLayout>
+    <div className="w-full">
       <h1 className="flex flex-row gap-3 items-center rounded-t-lg px-4 py-2 bg-detail-view-bg text-xl font-extrabold border-l-2">
-        <span className="bg-box-bg rounded-lg px-2 py-1">
-          {boardDetail?.category}
-        </span>
         {boardDetail?.title}
       </h1>
       <div className="flex flex-row justify-between px-8 py-1 bg-detail-view-bg border-y border-gray-300 text-gray-700">
@@ -111,7 +107,7 @@ const BoardDetailView = () => {
         </div>
       </div>
       <div className="bg-detail-view-bg min-h-96 px-6">
-        {authUser?.username === boardDetail?.username && (
+        {isAuthenticated && authUser?.username === boardDetail?.username && (
           <div className="flex flex-row gap-4 pt-2 justify-end">
             <button onClick={delteBoard} className="text-gray-600 underline">
               삭제
@@ -128,14 +124,16 @@ const BoardDetailView = () => {
           {boardDetail?.content}
         </p>
       </div>
-      {boardDetail?.category !== "공지" && <BoardRecommendAreaComponent />}
+      {boardDetail?.category !== "공지" && (
+        <BoardRecommendAreaComponent boardId={boardId} />
+      )}
       <BoardCommentListView
         commentCount={boardDetail?.commentCount ?? 0}
         comments={boardDetail?.comments ?? []}
         commentRef={commentRef}
         postComment={postComment}
       />
-    </BoardLayout>
+    </div>
   );
 };
 

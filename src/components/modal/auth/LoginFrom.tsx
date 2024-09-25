@@ -58,6 +58,7 @@ const LoginFrom: FC<LoginFromProps> = (props) => {
       .then((loginRes: loginRes) => {
         setAuthUser(loginRes);
         setIsOpen(false);
+        location.reload();
       })
       .catch((err) => {
         setLoginErrorSwitch(true);

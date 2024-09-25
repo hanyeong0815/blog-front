@@ -35,8 +35,8 @@ const EmailCertifyFrom: FC<EmailCertifyFromProps> = (props) => {
     axios
       .post(url, { invitationCode, email })
       .then(({ data }) => data)
-      .then((reponse: boolean) => {
-        setHasEmailCertify(true);
+      .then((response: boolean) => {
+        setHasEmailCertify(response);
         setIsOpen(false);
       })
       .catch((err) => {

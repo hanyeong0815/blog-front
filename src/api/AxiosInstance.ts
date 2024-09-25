@@ -6,8 +6,13 @@ const api = axios.create();
 api.interceptors.request.use(
   (config) => {
     const accessToken = StorageManager.getItem("accessToken");
-    if (accessToken) {
-      config.headers!["Authorization"] = `${accessToken}`;
+
+    if (accessToken !== null) {
+      config.headers!["Authorization"] = `${
+        accessToken.startsWith("Bearer ")
+          ? accessToken
+          : "Bearer " + accessToken
+      }`;
     }
     return config;
   },

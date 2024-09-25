@@ -1,8 +1,10 @@
 import api from "@/api/AxiosInstance";
 import BoardLayout from "@components/layout/BoardLayout";
+import Layout from "@components/layout/Layout";
 import { boardUpdateData } from "@models/board/BoardDetailView";
 import category from "@models/category/Category";
 import useAuth from "@store/auth/useAuth";
+import StorageManager from "@utils/common/storage";
 import axios from "axios";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -106,24 +108,9 @@ const BoardPostPage = () => {
   }, []);
 
   return (
-    <BoardLayout>
+    <Layout>
       <div className="flex flex-col gap-4 py-4 bg-comment-bg w-full h-full rounded-lg">
         <div className="flex flex-row gap-4 px-6 py-4 bg-board-post-bg border-y">
-          <select
-            ref={categoryRef}
-            value={board?.category ?? ""}
-            onChange={handleSelectChange}
-            className="px-4 py-2 appearance-none text-center font-bold bg-gray-300"
-          >
-            <option value="">카테고리</option>
-            {categoryList?.map((category, index) => {
-              return (
-                <option key={category.id} value={category.category}>
-                  {category.category}
-                </option>
-              );
-            })}
-          </select>
           <input
             type="text"
             ref={titleRef}
@@ -149,7 +136,7 @@ const BoardPostPage = () => {
           </button>
         </div>
       </div>
-    </BoardLayout>
+    </Layout>
   );
 };
 

@@ -4,6 +4,7 @@ import PATH from "@utils/routes/PATH";
 import Home from "./pages/Home";
 import BoardDetailView from "./pages/board/BoardDetailView";
 import BoardPostPage from "./pages/board/BoardPostPage";
+import BlogHome from "./pages/BlogHome";
 
 function App() {
   const { HOME, BOARD_POST } = PATH;
@@ -14,15 +15,10 @@ function App() {
         <Route path={HOME} element={<Home />}>
           <Route path=":page" element={<Home />} />
         </Route>
-        <Route path=":category" element={<Home />}>
-          <Route path=":page" element={<Home />} />
+        <Route path=":domain" element={<BlogHome />}>
+          <Route path=":boardId" element={<BlogHome />} />
         </Route>
-        <Route path={BOARD_POST} element={<BoardPostPage />}>
-          <Route path=":boardId" element={<BoardPostPage />} />
-        </Route>
-        <Route path="board">
-          <Route path=":boardId" element={<BoardDetailView />} />
-        </Route>
+        <Route path=":domain/post" element={<BoardPostPage />} />
       </Routes>
     </>
   );

@@ -6,8 +6,10 @@ export default interface boardList {
 
 export interface boardListView {
   boardId: string | null;
-  boardNumber: number | null;
+  sequence: number | null;
   title: string | null;
+  content: string | null;
+  category: string | null;
   commentCount: number | null;
   username: string | null;
   nickname: string | null;

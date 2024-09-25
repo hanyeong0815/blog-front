@@ -27,9 +27,7 @@ const BoardCommentListView: FC<BoardCommentListViewProps> = (props) => {
 
   const updateComment = useCallback(
     (commentId: string | undefined) => {
-      console.log("진입1", commentContent);
       if (commentId === undefined || commentContent === "") {
-        console.log("진입2");
         return;
       }
 
@@ -94,7 +92,7 @@ const BoardCommentListView: FC<BoardCommentListViewProps> = (props) => {
 
   return (
     <div className="border-2 flex flex-col gap-1 rounded-md">
-      <div className="px-4 py-2 text-xl font-bold">댓글</div>
+      <div className="px-4 py-2 text-xl font-bold text-gray-300">댓글</div>
       <div className="flex flex-col gap-1 bg-[#6279B8] min-h-20 border-t border-black">
         {commentCount ?? 0 > 0 ? (
           comments.map((comment, index) => {

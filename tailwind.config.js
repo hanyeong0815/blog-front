@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       gridTemplateColumns: {
-        custom: "15% 45% 20% 10% 10%",
+        custom: "10% 50% 20% 10% 10%",
         custom2: "75% 1% 24%",
       },
       colors: {

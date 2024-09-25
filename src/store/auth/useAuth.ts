@@ -2,6 +2,7 @@ import authUser from "@models/users/AuthUser";
 import loginRes from "@models/users/dto/LoginDto";
 import ContextCallbackOption from "@models/users/dto/api/ContextCallbackOption";
 import StorageManager from "@utils/common/storage";
+import axios from "axios";
 import create from "zustand";
 
 interface AuthState {
@@ -49,6 +50,18 @@ const useAuth = create<AuthState>((set, get) => ({
     set({ accessToken: accessToken });
   },
   logout: (option) => {
+    const refreshToken = StorageManager.getItem("refreshToken");
+
+    const url = "http://localhost:8080/member/logout";
+
+    axios
+      .post(url, {
+        refreshToken,
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
     StorageManager.clearAllUnsticky();
     set({ isAuthenticated: false, authUser: null });
     option?.success && option.success(true);

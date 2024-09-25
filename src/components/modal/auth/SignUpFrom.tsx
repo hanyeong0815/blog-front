@@ -39,6 +39,7 @@ const SignUpFrom: FC<SignUpFromProps> = (props) => {
   const [passwordCheckErrorSwitch, setPasswordCheckErrorSwitch] = useState<
     boolean | null
   >(null);
+  const [nicknameSwitch, setNicknameSwitch] = useState<boolean | null>(null);
   const [genderSwitch, setGenderSwitch] = useState<boolean | null>(null);
   const [genderCheckSwitch, setGenderCheckSwitch] = useState<boolean>(false);
   const [backEmailActivate, setBackEmailActivate] = useState<boolean>(true);
@@ -151,6 +152,7 @@ const SignUpFrom: FC<SignUpFromProps> = (props) => {
       .then((signUpRes: loginRes) => {
         setAuthUser(signUpRes);
         setIsOpen(false);
+        location.reload();
       })
       .catch((err) => {
         console.error("\n\n\n\n\n\n", err, "\n\n\n\n\n\n");
@@ -236,7 +238,27 @@ const SignUpFrom: FC<SignUpFromProps> = (props) => {
           <input
             type="text"
             ref={nicknameRef}
-            className={`${defaultTextBoxStyle} w-2/12`}
+            onBlur={async (evt) => {
+              if (evt.currentTarget.value === "") return;
+
+              const url = `http://localhost:8090/profile/verify/nickname/${evt.currentTarget.value}`;
+              await axios
+                .get(url)
+                .then(({ data }) => data)
+                .then((response: boolean) => {
+                  setNicknameSwitch(response);
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
+            }}
+            className={`${defaultTextBoxStyle} w-2/12 ${
+              nicknameSwitch !== null
+                ? nicknameSwitch
+                  ? "border-green-400"
+                  : "border-red-600"
+                : ""
+            }`}
             spellCheck={false}
           />
         </div>
