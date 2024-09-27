@@ -6,7 +6,7 @@ import {
   useLayoutEffect,
   useState,
 } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import blogLogo from "@assets/img/blog-log.svg";
 import api from "@/api/AxiosInstance";
 import domainDto from "@models/users/Domain";
@@ -14,14 +14,20 @@ import domainDto from "@models/users/Domain";
 interface HomeHeadProps {
   setIsSignIpOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsLoginOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsDomainCreateOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isAuthenticated: boolean;
   authUser: authUser | null;
 }
 
 const HomeHead: FC<HomeHeadProps> = (props) => {
-  const { setIsSignIpOpen, setIsLoginOpen, isAuthenticated, authUser } = props;
+  const {
+    setIsSignIpOpen,
+    setIsLoginOpen,
+    setIsDomainCreateOpen,
+    isAuthenticated,
+    authUser,
+  } = props;
   const { domain } = useParams();
-  const navi = useNavigate();
   const { logout } = useAuth();
 
   const [findDomain, setFindDomain] = useState<string | null>();
@@ -87,7 +93,12 @@ const HomeHead: FC<HomeHeadProps> = (props) => {
               </Link>
             )
           ) : (
-            <button className="px-4 py-1 border rounded-3xl bg-green-400">
+            <button
+              onClick={() => {
+                setIsDomainCreateOpen(true);
+              }}
+              className="px-4 py-1 border rounded-3xl bg-green-400"
+            >
               블로그 만들기
             </button>
           )}

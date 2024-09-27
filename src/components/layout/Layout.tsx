@@ -6,6 +6,7 @@ import HomeHead from "./HomeHead";
 import useAuth from "@store/auth/useAuth";
 import UnSginWarningPage from "@components/modal/auth/UnSginWarningPage";
 import api from "@/api/AxiosInstance";
+import CreateDomainModal from "@components/modal/domain/CreateDomainModal";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -59,9 +60,17 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           setIsSignInOpen={setIsLoginOpen}
         />
       </Modal>
+      <Modal
+        isOpen={isDomainCreateOpen}
+        setIsOpen={setIsDomainCreateOpen}
+        className="m-80"
+      >
+        <CreateDomainModal setIsOpen={setIsDomainCreateOpen} />
+      </Modal>
       <HomeHead
         setIsLoginOpen={setIsLoginOpen}
         setIsSignIpOpen={setIsSignUpOpen}
+        setIsDomainCreateOpen={setIsDomainCreateOpen}
         isAuthenticated={isAuthenticated}
         authUser={authUser}
       />

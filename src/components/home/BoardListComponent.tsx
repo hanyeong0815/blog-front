@@ -32,8 +32,8 @@ const BoardListComponent: FC<BoardListComponentProps> = (props) => {
   }, [divRef.current?.offsetWidth]); // width 변경 시 height 업데이트
   return (
     <div className="flex flex-col gap-1 w-full border rounded-md p-4 bg-main">
-      {boardList !== undefined ? (
-        boardList.map((board, index) => {
+      {boardList?.length !== 0 ? (
+        boardList!.map((board, index) => {
           return (
             <Link to={`/${domain}/${board.boardId}`} key={board.boardId}>
               <div key={board.boardId} className="flex flex-row">
