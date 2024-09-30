@@ -92,5 +92,8 @@ module.exports = {
       "t-inner": "inset 0 7px 9px -7px rgba(0,0,0,0.4)",
     },
   },
-  plugins: [require("tailwind-scrollbar-hide")],
+  plugins: [
+    require("tailwind-scrollbar-hide"),
+    require("@tailwindcss/typography"),
+  ],
 };
