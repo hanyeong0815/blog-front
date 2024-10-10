@@ -9,6 +9,7 @@ import BoardCommentListView from "@components/board/BoardCommentListView";
 import BoardRecommendAreaComponent from "@components/board/BoardRecommendAreaComponent";
 import api from "@/api/AxiosInstance";
 import PATH from "@utils/routes/PATH";
+import BoardMarkdownViewer from "@components/board/BoardMarkdownViewer";
 
 const BoardDetailView = () => {
   const { boardId } = useParams();
@@ -120,13 +121,12 @@ const BoardDetailView = () => {
             </Link>
           </div>
         )}
-        <p className="h-full whitespace-pre-line pt-20">
-          {boardDetail?.content}
-        </p>
+        <BoardMarkdownViewer
+          content={boardDetail?.content ?? ""}
+          className="w-full h-full"
+        />
       </div>
-      {boardDetail?.category !== "공지" && (
-        <BoardRecommendAreaComponent boardId={boardId} />
-      )}
+      <BoardRecommendAreaComponent boardId={boardId} />
       <BoardCommentListView
         commentCount={boardDetail?.commentCount ?? 0}
         comments={boardDetail?.comments ?? []}

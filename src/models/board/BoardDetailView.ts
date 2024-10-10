@@ -1,7 +1,7 @@
 export default interface boardDetailView {
   username: string;
   nickname: string;
-  category: string;
+  domain: string;
   boardId: string;
   title: string;
   content: string;

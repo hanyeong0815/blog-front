@@ -1,3 +1,4 @@
+import BoardMarkdownViewer from "@components/board/BoardMarkdownViewer";
 import { boardListView } from "@models/board/BoardListView";
 import PATH from "@utils/routes/PATH";
 import { format } from "date-fns";
@@ -36,9 +37,15 @@ const BoardListComponent: FC<BoardListComponentProps> = (props) => {
         boardList?.map((board, index) => {
           return (
             <Link to={`/${domain}/${board.boardId}`} key={board.boardId}>
-              <div key={board.boardId} className="flex flex-row">
-                <div ref={divRef} className={`w-[20%] h-[${height}px]`}></div>
-                <div className="flex flex-col gap-2 w-[80%] border-x px-4">
+              <div key={board.boardId} className="flex flex-row h-[205px]">
+                <div ref={divRef} className={`w-[20%] h-full`}>
+                  <img
+                    src={`https://blog-side-project-front.s3.ap-northeast-2.amazonaws.com/${board.ogThumbnailFileName}`}
+                    alt="thumbnail"
+                    className="w-full h-full"
+                  />
+                </div>
+                <div className="flex flex-col w-[80%] h-[205px] border-x px-4">
                   <div className="flex flex-row justify-between p-2 border-b border-gray-500">
                     <p className="text-xl font-bold">{board.title}</p>
                     <p className="text-gray-500">
@@ -47,8 +54,8 @@ const BoardListComponent: FC<BoardListComponentProps> = (props) => {
                       })}
                     </p>
                   </div>
-                  <div className="border-b border-gray-200 h-20 p-2">
-                    <p className="h-full text-gray-500 text-sm">
+                  <div className="border-b border-gray-200 h-[160px] p-2">
+                    <p className="h-full text-gray-500 text-sm whitespace-pre-line overflow-y-hidden text-ellipsis">
                       {board.content}
                     </p>
                   </div>

@@ -9,10 +9,11 @@ export interface boardListView {
   sequence: number | null;
   title: string | null;
   content: string | null;
-  category: string | null;
+  domain: string | null;
   commentCount: number | null;
   username: string | null;
   nickname: string | null;
   createdAt: string;
   viewCount: number | null;
+  ogThumbnailFileName: string | null;
 }

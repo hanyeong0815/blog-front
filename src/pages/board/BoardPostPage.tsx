@@ -1,24 +1,24 @@
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { useCallback, useRef, useState, useLayoutEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "@/api/AxiosInstance";
 import Layout from "@components/layout/Layout";
 import useAuth from "@store/auth/useAuth";
 import CanvasImageButtons from "@styles/button/CanvasImageButton";
+import BoardMarkdownViewer from "@components/board/BoardMarkdownViewer";
+import boardDetailView from "@models/board/BoardDetailView";
 
 const BoardPostPage = () => {
   const { boardId } = useParams();
   const { authUser } = useAuth();
   const navi = useNavigate();
 
-  const categoryRef = useRef<HTMLSelectElement | null>(null);
   const titleRef = useRef<HTMLInputElement | null>(null);
   const contentRef = useRef<HTMLTextAreaElement | null>(null);
 
   const [markdownContent, setMarkdownContent] = useState<string>("");
   const [board, setBoard] = useState<{ title?: string }>({});
   const [selectImg, setSelectImg] = useState<number>(1);
+  const [file, setFile] = useState<any>();
 
   useLayoutEffect(() => {
     if (boardId === undefined) return;
@@ -41,31 +41,54 @@ const BoardPostPage = () => {
   };
 
   const post = useCallback(() => {
-    const category = categoryRef.current?.value;
     const title = titleRef.current?.value;
     const content = contentRef.current?.value;
 
-    if (category === "" || title === "" || content === "") return;
+    if (title === "" || content === "") return;
 
     const url = "http://localhost:8100/board";
     const updateBoardId = boardId ?? null;
 
+    const formData = new FormData();
+
+    formData.append(
+      "dto",
+      new Blob(
+        [
+          JSON.stringify({
+            id: updateBoardId,
+            title,
+            content,
+            username: authUser?.username,
+            nickname: authUser?.nickname,
+            ogNumber: selectImg,
+          }),
+        ],
+        {
+          type: "application/json",
+        }
+      )
+    );
+    if (selectImg === 5) {
+      formData.append("og", file);
+    }
+
+    console.log(formData, selectImg);
+
     api
-      .post(url, {
-        id: updateBoardId,
-        category,
-        title,
-        content,
-        username: authUser?.username,
-        nickname: authUser?.nickname,
+      .post(url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
-      .then(({ data }) => {
-        if (data) navi("/home");
+      .then(({ data }) => data)
+      .then((response: boardDetailView) => {
+        navi(`/${response.domain}`);
       })
       .catch((err) => {
         console.error(err);
       });
-  }, [authUser?.username, authUser?.nickname, boardId, navi]);
+  }, [authUser?.username, authUser?.nickname, boardId, selectImg, file, navi]);
 
   return (
     <Layout>
@@ -83,6 +106,8 @@ const BoardPostPage = () => {
         <div className="px-6">
           <CanvasImageButtons
             selectImg={selectImg}
+            file={file}
+            setFile={setFile}
             setSelectImg={setSelectImg}
           />
         </div>
@@ -94,19 +119,12 @@ const BoardPostPage = () => {
               value={markdownContent}
               onChange={handleTextareaChange}
               placeholder="--- 가로선
-# X(1~6) 제목(1~6)
-n> 인용"
+# + (1~6) 제목(1~6)
+> 인용"
               className="resize-none px-4 py-2 text-xl text-gray-200 bg-gray-700 w-[50%] h-screen leading-relaxed"
               spellCheck={false}
             />
-            <div className="border p-4 bg-white w-[50%] rounded-lg prose prose-xl prose-h1:m-1 prose-h2:m-1 prose-h3:m-1 prose-h4:m-1 prose-h5:m-1 prose-h6:m-1 prose-blockquote:m-1 prose-blockquote:leading-3 prose-hr:m-2 prose-p:m-1 max-w-none">
-              <ReactMarkdown
-                className="w-full h-full whitespace-pre-line"
-                remarkPlugins={[remarkGfm]} // 줄바꿈을 강제하는 플러그인 추가
-              >
-                {markdownContent}
-              </ReactMarkdown>
-            </div>
+            <BoardMarkdownViewer content={markdownContent} />
           </div>
           <button
             onClick={post}

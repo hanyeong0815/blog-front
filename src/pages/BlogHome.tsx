@@ -55,13 +55,17 @@ const BlogHome = () => {
   return (
     <Layout>
       <div className="w-full h-screen flex flex-row bg-base-bg">
-        <div className={`${naviSwtich ? "w-[20%]" : "w-[5%]"}`}>
+        <div className={`h-screen ${naviSwtich ? "w-[20%]" : "w-[5%]"}`}>
           <BoardNavigationBar
             naviSwitch={naviSwtich}
             setNaviSwtich={setNaviSwtich}
           />
         </div>
-        <div className={`flex flex-row ${naviSwtich ? "w-[80%]" : "w-[95%]"}`}>
+        <div
+          className={`flex flex-row h-screen ${
+            naviSwtich ? "w-[80%]" : "w-[95%]"
+          }`}
+        >
           {boardId !== undefined ? (
             <BoardDetailView />
           ) : (
