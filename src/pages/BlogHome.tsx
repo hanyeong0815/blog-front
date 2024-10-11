@@ -57,6 +57,8 @@ const BlogHome = () => {
       <div className="w-full h-screen flex flex-row bg-base-bg">
         <div className={`h-screen ${naviSwtich ? "w-[20%]" : "w-[5%]"}`}>
           <BoardNavigationBar
+            domain={domain}
+            boardList={boardList?.boardList}
             naviSwitch={naviSwtich}
             setNaviSwtich={setNaviSwtich}
           />

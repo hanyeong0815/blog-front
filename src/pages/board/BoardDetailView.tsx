@@ -10,6 +10,7 @@ import BoardRecommendAreaComponent from "@components/board/BoardRecommendAreaCom
 import api from "@/api/AxiosInstance";
 import PATH from "@utils/routes/PATH";
 import BoardMarkdownViewer from "@components/board/BoardMarkdownViewer";
+import { Helmet } from "react-helmet";
 
 const BoardDetailView = () => {
   const { boardId } = useParams();
@@ -80,60 +81,71 @@ const BoardDetailView = () => {
   }, [boardDetail]);
 
   return (
-    <div className="w-full">
-      <h1 className="flex flex-row gap-3 items-center rounded-t-lg px-4 py-2 bg-detail-view-bg text-xl font-extrabold border-l-2">
-        {boardDetail?.title}
-      </h1>
-      <div className="flex flex-row justify-between px-8 py-1 bg-detail-view-bg border-y border-gray-300 text-gray-700">
-        <div>
-          <p>{boardDetail?.nickname ?? "테스터"}</p>
-        </div>
-        <div className="flex flex-row gap-8">
-          <p className="px-3">
-            조회 수:&nbsp;&nbsp;
-            <span className="text-black">{boardDetail?.viewCount}</span>
-          </p>
-          <p className="px-3">
-            작성일:&nbsp;&nbsp;
-            <span className="text-black">
-              {format(
-                boardDetail?.createdAt ?? "2011-11-11T11:11:11.360Z",
-                "yyyy-MM-dd HH:mm",
-                {
-                  locale: ko,
-                }
-              )}
-            </span>
-          </p>
-        </div>
-      </div>
-      <div className="bg-detail-view-bg min-h-96 px-6">
-        {isAuthenticated && authUser?.username === boardDetail?.username && (
-          <div className="flex flex-row gap-4 pt-2 justify-end">
-            <button onClick={delteBoard} className="text-gray-600 underline">
-              삭제
-            </button>
-            <Link
-              to={`${BOARD_POST}/${boardDetail?.boardId}`}
-              className="text-gray-600 underline"
-            >
-              수정
-            </Link>
+    <>
+      <Helmet>
+        <meta property="og:title" content={boardDetail?.title} />
+        <meta property="og:description" content={boardDetail?.content} />
+        <meta
+          property="og:image"
+          content={`https://blog-side-project-front.s3.ap-northeast-2.amazonaws.com/${boardDetail?.ogThumbnailFileName}`}
+        />
+        <meta property="og:url" content={window.location.href} />
+      </Helmet>
+      <div className="w-full">
+        <h1 className="flex flex-row gap-3 items-center rounded-t-lg px-4 py-2 bg-detail-view-bg text-xl font-extrabold border-l-2">
+          {boardDetail?.title}
+        </h1>
+        <div className="flex flex-row justify-between px-8 py-1 bg-detail-view-bg border-y border-gray-300 text-gray-700">
+          <div>
+            <p>{boardDetail?.nickname ?? "테스터"}</p>
           </div>
-        )}
-        <BoardMarkdownViewer
-          content={boardDetail?.content ?? ""}
-          className="w-full h-full"
+          <div className="flex flex-row gap-8">
+            <p className="px-3">
+              조회 수:&nbsp;&nbsp;
+              <span className="text-black">{boardDetail?.viewCount}</span>
+            </p>
+            <p className="px-3">
+              작성일:&nbsp;&nbsp;
+              <span className="text-black">
+                {format(
+                  boardDetail?.createdAt ?? "2011-11-11T11:11:11.360Z",
+                  "yyyy-MM-dd HH:mm",
+                  {
+                    locale: ko,
+                  }
+                )}
+              </span>
+            </p>
+          </div>
+        </div>
+        <div className="bg-detail-view-bg min-h-96 px-6">
+          {isAuthenticated && authUser?.username === boardDetail?.username && (
+            <div className="flex flex-row gap-4 pt-2 justify-end">
+              <button onClick={delteBoard} className="text-gray-600 underline">
+                삭제
+              </button>
+              <Link
+                to={`${BOARD_POST}/${boardDetail?.boardId}`}
+                className="text-gray-600 underline"
+              >
+                수정
+              </Link>
+            </div>
+          )}
+          <BoardMarkdownViewer
+            content={boardDetail?.content ?? ""}
+            className="w-full h-full"
+          />
+        </div>
+        <BoardRecommendAreaComponent boardId={boardId} />
+        <BoardCommentListView
+          commentCount={boardDetail?.commentCount ?? 0}
+          comments={boardDetail?.comments ?? []}
+          commentRef={commentRef}
+          postComment={postComment}
         />
       </div>
-      <BoardRecommendAreaComponent boardId={boardId} />
-      <BoardCommentListView
-        commentCount={boardDetail?.commentCount ?? 0}
-        comments={boardDetail?.comments ?? []}
-        commentRef={commentRef}
-        postComment={postComment}
-      />
-    </div>
+    </>
   );
 };
 

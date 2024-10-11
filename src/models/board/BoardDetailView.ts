@@ -9,6 +9,7 @@ export default interface boardDetailView {
   viewCount: number;
   commentCount: number;
   createdAt: string;
+  ogThumbnailFileName: string;
 }
 
 export interface boardUpdateData {
