@@ -33,7 +33,13 @@ const Home = () => {
                   key={board.boardId}
                   className="flex flex-row p-4 h-36 border rounded-md"
                 >
-                  <div className="w-[30%] border-r">이미지</div>
+                  <div className="w-[30%] border-r">
+                    <img
+                      src={`https://blog-side-project-front.s3.ap-northeast-2.amazonaws.com/${board.ogThumbnailFileName}`}
+                      alt="thumbnail"
+                      className="w-full h-full"
+                    />
+                  </div>
                   <div className="w-[70%] flex flex-col pl-2">
                     <p className="text-xl font-bold">{board.title}</p>
                     <p>{board.content}</p>
